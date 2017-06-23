@@ -11,11 +11,11 @@
 
 1. 開啟TestScript.xlsm
 
-2. APP&Device工作表輸入APP Packageanme、APP Avtivity、測試手機UDID、測試手機OS版本與待測試腳本 (以_TestCase結尾的工作表)
+2. APP&Device工作表輸入APP Bundle ID、測試手機UDID、測試手機OS版本與待測試腳本 (以_TestCase結尾的工作表)
 
 範例如下圖：
 
-![image](https://github.com/Gilleschen/APP_Vsaas_2.0_Android_invoke_excel_Result_try_catch/blob/master/picture/app_device_example.PNG)
+![image](https://github.com/Gilleschen/APP_Vsaas_2.0_iOS_invoke_excel_Result_try_catch/blob/master/picture/app_device_example.PNG)
 
 3. 建立腳本(建立案列Case)：新增一工作表，工作表名稱須以_TestCase為結尾 (e.g. Login_TestCase)，目前支援指令如下: (大小寫有分，使用方式請參考TestScript.xlsm內說明工作表)
 

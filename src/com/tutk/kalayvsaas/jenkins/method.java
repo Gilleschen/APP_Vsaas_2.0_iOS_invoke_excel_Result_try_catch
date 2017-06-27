@@ -36,7 +36,7 @@ public class method {
 	static String appElemnt;// APP元件名稱
 	static String appInput;// 輸入值
 	String element[] = new String[driver.length];
-	static int CurrentCaseNumber = 0;// 目前執行到第幾個測試案列
+	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	XSSFSheet Sheet;
 
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
@@ -214,7 +214,7 @@ public class method {
 			System.out.println("[Error] Can't find C:\\TestReport\\TestReport.xlsm");
 		}
 
-		CurrentCaseNumber = CurrentCaseNumber + 1;
+		//CurrentCaseNumber = CurrentCaseNumber + 1;
 
 	}
 
@@ -318,7 +318,7 @@ public class method {
 
 	public void LaunchAPP() {
 		DesiredCapabilities cap[] = new DesiredCapabilities[TestCase.DeviceInformation.deviceName.size()];
-
+		CurrentCaseNumber = CurrentCaseNumber + 1;
 		for (int i = 0; i < TestCase.DeviceInformation.deviceName.size(); i++) {
 			cap[i] = new DesiredCapabilities();
 		}
@@ -331,10 +331,12 @@ public class method {
 				cap[i].setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName.get(i));
 				cap[i].setCapability(IOSMobileCapabilityType.BUNDLE_ID, TestCase.DeviceInformation.BundleID);
 				cap[i].setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, command_timeout);
+				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TestReport");//Report路徑
+				cap[i].setCapability(SeeTestCapabilityType.TEST_NAME, TestCase.CaseList.get(CurrentCaseNumber));//TestCase名稱
 
 				try {
 					driver[j] = new SeeTestIOSDriver<>(new URL("http://localhost:" + port + "/wd/hub"), cap[j]);
-				} catch (MalformedURLException e) {
+				} catch (Exception e) {
 					System.out.print("[Error] Can't find UDID: " + TestCase.DeviceInformation.deviceName.get(i));
 					System.out.println("or can't find BundleID: " + TestCase.DeviceInformation.BundleID);
 				}

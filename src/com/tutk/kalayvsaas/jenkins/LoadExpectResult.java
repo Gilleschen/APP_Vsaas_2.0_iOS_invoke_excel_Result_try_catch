@@ -9,9 +9,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class LoadExpectResult {
 
 	public ArrayList<String> ResultList = new ArrayList<String>();// 存放某測試案列的期望結果
-	// public ArrayList<String> ResultCaseNameList = new ArrayList<String>();//
-	// 所有Case的名稱清單
-	// LoadDeviceInformation DeviceInformation = new LoadDeviceInformation();
 
 	public void LoadExpectResult(String CaseName) {// 傳入測試案列名稱
 		XSSFWorkbook workbook;

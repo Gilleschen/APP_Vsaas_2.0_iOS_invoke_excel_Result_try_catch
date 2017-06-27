@@ -81,7 +81,7 @@
 
 方法二：$ java -jar APP_iOS.jar
 
-#### Excel測試報告
+#### Excel 測試報告
 
 1. 開啟C:\TestReport\TestReport.xlsm
 
@@ -93,7 +93,7 @@
 
 ![image](https://github.com/Gilleschen/APP_Vsaas_2.0_Android_invoke_excel_Result_try_catch/blob/master/picture/Testreport_example.PNG)
 
-#### experitest測試報告
+#### experitest 測試報告
 
 開啟C:\TestReport\index.html，範例如下圖：
 

@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -35,6 +36,7 @@ public class method {
 	static XSSFWorkbook workBook;
 	static String appElemnt;// APP元件名稱
 	static String appInput;// 輸入值
+	static String toElemnt;// APP元件名稱
 	String element[] = new String[driver.length];
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	XSSFSheet Sheet;
@@ -77,6 +79,13 @@ public class method {
 				methodName = "ByXpath_Wait";
 				appElemnt = TestCase.StepList.get(i + 1);
 				i = i + 1;
+				break;
+
+			case "ByXpath_Swipe":
+				methodName = "ByXpath_Swipe";
+				appElemnt = TestCase.StepList.get(i + 1);
+				toElemnt = TestCase.StepList.get(i + 2);
+				i = i + 2;
 				break;
 
 			case "HideKeyboard":
@@ -134,7 +143,7 @@ public class method {
 	}
 
 	public void ByXpath_Wait() {
-		
+
 		for (int i = 0; i < driver.length; i++) {
 			wait[i] = new WebDriverWait(driver[i], device_timeout);
 			try {
@@ -214,7 +223,7 @@ public class method {
 			System.out.println("[Error] Can't find C:\\TestReport\\TestReport.xlsm");
 		}
 
-		//CurrentCaseNumber = CurrentCaseNumber + 1;
+		// CurrentCaseNumber = CurrentCaseNumber + 1;
 
 	}
 
@@ -236,6 +245,22 @@ public class method {
 				driver[i].findElement(By.xpath(appElemnt)).click();
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
+			}
+
+		}
+	}
+
+	public void ByXpath_Swipe() {
+		Point p1, p2;// p1 為起點;p2為終點
+
+		for (int i = 0; i < driver.length; i++) {
+			try {
+				p2 = driver[i].findElement(By.xpath(toElemnt)).getLocation();
+				p1 = driver[i].findElement(By.xpath(appElemnt)).getLocation();
+				driver[i].swipe(p1.x, p1.y, p1.x, p1.y - (p1.y - p2.y), 1000);
+			} catch (Exception e) {
+				System.out.println("[Error] Can't find " + appElemnt);
+				System.out.println("[Error] or Can't find " + toElemnt);
 			}
 
 		}
@@ -331,8 +356,8 @@ public class method {
 				cap[i].setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName.get(i));
 				cap[i].setCapability(IOSMobileCapabilityType.BUNDLE_ID, TestCase.DeviceInformation.BundleID);
 				cap[i].setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, command_timeout);
-				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TestReport");//Report路徑
-				cap[i].setCapability(SeeTestCapabilityType.TEST_NAME, TestCase.CaseList.get(CurrentCaseNumber));//TestCase名稱
+				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TestReport");// Report路徑
+				cap[i].setCapability(SeeTestCapabilityType.TEST_NAME, TestCase.CaseList.get(CurrentCaseNumber));// TestCase名稱
 
 				try {
 					driver[j] = new SeeTestIOSDriver<>(new URL("http://localhost:" + port + "/wd/hub"), cap[j]);

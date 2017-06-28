@@ -28,6 +28,8 @@
         Byid_Result=>搜尋元件id並比對ExpectResult內容
 
         Byid_SendKey=>搜尋元件id並輸入數值或字串
+        
+        Byid_Swipe=>上下滑動畫面
 
         Byid_Wait=>等待並搜尋元件id
 
@@ -36,6 +38,8 @@
         ByXpath_Result=>搜尋元件xpath並比對ExpectResult內容
 
         ByXpath_SendKey=>搜尋元件xpath並輸入數值或字串
+        
+        ByXpath_Swipe=>上下滑動畫面
 
         ByXpath_Wait=>等待並搜尋元件xpath
 

@@ -20,8 +20,6 @@
 3. 建立腳本(建立案列Case)：新增一工作表，工作表名稱須以_TestCase為結尾 (e.g. Login_TestCase)，目前支援指令如下: (大小寫有分，使用方式請參考TestScript.xlsm內說明工作表)
 
         CaseName=>測試案列名稱(各案列開始時第一個填寫項目，必填!!!)
-        
-        Back=>點擊手機返回鍵
 
         Byid_Click=>搜尋元件id並點擊元件
 

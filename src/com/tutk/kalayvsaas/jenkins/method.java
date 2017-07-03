@@ -26,7 +26,7 @@ import io.appium.java_client.remote.IOSMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 
 public class method {
-	int port = 8889;// Appium studio port
+	int port = 4723;// Appium studio port
 	int device_timeout = 60;// 60sec
 	int command_timeout = 30;// 30sec
 	LoadExpectResult ExpectResult = new LoadExpectResult();
@@ -262,7 +262,6 @@ public class method {
 				System.out.println("[Error] Can't find " + appElemnt);
 				System.out.println("[Error] or Can't find " + toElemnt);
 			}
-
 		}
 	}
 
@@ -356,6 +355,7 @@ public class method {
 				cap[i].setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName.get(i));
 				cap[i].setCapability(IOSMobileCapabilityType.BUNDLE_ID, TestCase.DeviceInformation.BundleID);
 				cap[i].setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, command_timeout);
+				cap[i].setCapability(SeeTestCapabilityType.REPORT_FORMAT, "xml");
 				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TestReport");// Report¸ô®|
 				cap[i].setCapability(SeeTestCapabilityType.TEST_NAME, TestCase.CaseList.get(CurrentCaseNumber));// TestCase¦WºÙ
 
@@ -381,14 +381,14 @@ public class method {
 	public void Home() {
 		for (int i = 0; i < driver.length; i++) {
 
-			// driver[i].pressKeyCode(AndroidKeyCode.HOME);
+			driver[i].deviceAction("Home");
 		}
 	}
 
 	public void Power() {
 		for (int i = 0; i < driver.length; i++) {
 
-			// driver[i].pressKeyCode(AndroidKeyCode.KEYCODE_POWER);
+			driver[i].deviceAction("Power");
 
 		}
 	}

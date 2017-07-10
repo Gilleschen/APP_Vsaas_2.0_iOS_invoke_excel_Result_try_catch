@@ -20,6 +20,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -316,9 +317,11 @@ public class method {
 	public void ByXpath_Swipe_Vertical() {
 		Point p;// 元件座標
 		Dimension s;// 元件大小
+		WebElement e;
 		for (int i = 0; i < driver.length; i++) {
-			s = driver[i].findElement(By.xpath(appElemnt)).getSize();
-			p = driver[i].findElement(By.xpath(appElemnt)).getLocation();
+			e = driver[i].findElement(By.xpath(appElemnt));
+			s = e.getSize();
+			p = e.getLocation();
 			int errorX = (int) Math.round(s.width * 0.01);
 			int errorY = (int) Math.round(s.height * 0.01);
 			for (int j = 0; j < iterative; j++) {
@@ -334,9 +337,11 @@ public class method {
 	public void ByXpath_Swipe_Horizontal() {
 		Point p;// 元件座標
 		Dimension s;// 元件大小
+		WebElement e;
 		for (int i = 0; i < driver.length; i++) {
-			s = driver[i].findElement(By.xpath(appElemnt)).getSize();
-			p = driver[i].findElement(By.xpath(appElemnt)).getLocation();
+			e = driver[i].findElement(By.xpath(appElemnt));
+			s = e.getSize();
+			p = e.getLocation();
 			int errorX = (int) Math.round(s.getWidth() * 0.01);
 			int errorY = (int) Math.round(s.getHeight() * 0.01);
 			for (int j = 0; j < iterative; j++) {

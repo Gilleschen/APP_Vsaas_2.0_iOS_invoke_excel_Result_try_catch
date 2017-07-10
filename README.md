@@ -60,6 +60,10 @@
         Sleep=>閒置APP n秒鐘
         
         Swipe=>上下滑動n次
+        
+        ByXpath_Swipe_Vertical=>上下滑動n次
+ 
+        ByXpath_Swipe_Horizontal=>左右滑動n次
   
 範例腳本如下圖：
 

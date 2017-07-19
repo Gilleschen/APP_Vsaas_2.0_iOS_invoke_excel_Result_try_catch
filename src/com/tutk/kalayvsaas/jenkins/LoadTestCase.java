@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -32,15 +34,21 @@ public class LoadTestCase {
 						// System.out.println(sheet.getRow(i).getPhysicalNumberOfCells());
 
 						for (int j = 0; j < sheet.getRow(i).getPhysicalNumberOfCells(); j++) {
+							
+							if (sheet.getRow(i).getCell(j) != null) {//Apache POI 讀取Excel儲存格時，有機率將空白儲存格讀入，因此需判斷儲存格是否為空白，皆null
 
-							if (sheet.getRow(i).getCell(j).toString().equals("CaseName")) {
-								CaseList.add(sheet.getRow(i).getCell(1).toString());// 從指定待測試腳本的sheet中儲存測試案例的名稱
-								break;
-							} else {
+								if (sheet.getRow(i).getCell(j).toString().equals("CaseName")) {
+									CaseList.add(sheet.getRow(i).getCell(1).toString());// 從指定待測試腳本的sheet中儲存測試案例的名稱
+									break;
+								} else {
 
-								 StepList.add(sheet.getRow(i).getCell(j).getStringCellValue());// 從指定待測試腳本的sheet中儲存測試案例的步驟  Excel數字要轉成字串型態
-								//StepList.add(sheet.getRow(i).getCell(j).toString());// 從指定待測試腳本的sheet中儲存測試案例的步驟
+									StepList.add(sheet.getRow(i).getCell(j).getStringCellValue());// 從指定待測試腳本的sheet中儲存測試案例的步驟
+																									// Excel數字要轉成字串型態
+									// StepList.add(sheet.getRow(i).getCell(j).toString());//
+									// 從指定待測試腳本的sheet中儲存測試案例的步驟
+								}
 							}
+
 						}
 
 						i++;
@@ -59,9 +67,9 @@ public class LoadTestCase {
 		for (int i = 0; i < DeviceInformation.deviceName.size(); i++) {
 
 			if (DeviceInformation.deviceName.get(i).toString().length() > 20) {// Excel工作表名稱最常31字元因，故需判斷UDID長度是否大於31
-				char[] NewUdid = new char[20];//因需包含_TestReport字串(共11字元)，故設定20位字元陣列(31-11)
+				char[] NewUdid = new char[20];// 因需包含_TestReport字串(共11字元)，故設定20位字元陣列(31-11)
 				DeviceInformation.deviceName.get(i).toString().getChars(0, 20, NewUdid, 0);// 取出UDID前20字元給NewUdid
-				sheet = workbook.createSheet(String.valueOf(NewUdid) + "_TestReport");//使用NewUdid命名新工作表
+				sheet = workbook.createSheet(String.valueOf(NewUdid) + "_TestReport");// 使用NewUdid命名新工作表
 			} else {
 				sheet = workbook.createSheet(DeviceInformation.deviceName.get(i).toString() + "_TestReport");
 			}

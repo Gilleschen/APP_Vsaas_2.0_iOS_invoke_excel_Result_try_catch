@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
@@ -40,10 +41,12 @@ public class method {
 	static XSSFWorkbook workBook;
 	static String appElemnt;// APP元件名稱
 	static String appInput;// 輸入值
+	static String appInputXpath;// 輸入值的Xpath格式
 	static String toElemnt;// APP元件名稱
 	static int startx, starty, endx, endy;// Swipe移動座標
 	static int iterative;// 畫面滑動次數
-	static String scroll;// 畫面捲動方向
+	static String scroll;// 畫面捲動方向 (DOWN/UP/LEFT/RIGHT)
+	// static String appElemntarray;// 搜尋的多筆類似元件
 	String element[] = new String[driver.length];
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	XSSFSheet Sheet;
@@ -147,6 +150,14 @@ public class method {
 				i = i + 3;
 				break;
 
+			case "ByXpath_Swipe_FindText_Click_iOS":
+				methodName = "ByXpath_Swipe_FindText_Click_iOS";
+				appElemnt = TestCase.StepList.get(i + 1);
+				scroll = TestCase.StepList.get(i + 2);
+				appInput = TestCase.StepList.get(i + 3);
+				i = i + 3;
+				break;
+
 			case "Back":
 				methodName = "Back";
 				break;
@@ -161,6 +172,10 @@ public class method {
 
 			case "ResetAPP":
 				methodName = "ResetAPP";
+				break;
+
+			case "Menu":
+				methodName = "Menu";
 				break;
 
 			case "QuitAPP":
@@ -182,6 +197,7 @@ public class method {
 			wait[i] = new WebDriverWait(driver[i], device_timeout);
 			try {
 				wait[i].until(ExpectedConditions.presenceOfElementLocated(By.xpath(appElemnt)));
+
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
 			}
@@ -365,6 +381,84 @@ public class method {
 		}
 	}
 
+	public void ByXpath_Swipe_FindText_Click_iOS() {
+
+		for (int i = 0; i < driver.length; i++) {
+			wait[i] = new WebDriverWait(driver[i], device_timeout);
+			try {
+
+				WebElement ScrollBar, targetElement;// 定義卷軸與準備搜尋的元件
+				Point ScrollBarP, targetElementP;// 卷軸與準備搜尋元件的座標
+				Dimension ScrollBarS, targetElementS;// 卷軸與準備搜尋元件的長及寬
+
+				ScrollBar = driver[i].findElement(By.xpath(appElemnt));
+				targetElement = driver[i].findElement(By.xpath(appInput));
+
+				ScrollBarP = ScrollBar.getLocation();// 卷軸的座標
+				targetElementP = targetElement.getLocation();// 準備搜尋元件的座標
+
+				ScrollBarS = ScrollBar.getSize();// 卷軸元件的長及寬
+				targetElementS = targetElement.getSize();// 準備搜尋元件的長及寬
+
+				int errory = (int) Math.round(ScrollBarS.height * 0.1);
+				int errorx = (int) Math.round(ScrollBarS.width * 0.1);
+
+				while (targetElementP.y == 0 || targetElementP.x == 0) {// 根據搜尋元件的y座標或x座標是否為0，來判斷尋元件是否顯示於行動裝置畫面上
+
+					switch (scroll.toString()) {
+
+					case "DOWN"://向下搜尋
+						driver[i].swipe(ScrollBarP.x, ScrollBarS.height + ScrollBarP.y - errory, ScrollBarP.x,
+								ScrollBarP.y, 2000);
+						break;
+
+					case "UP"://向上搜尋
+						driver[i].swipe(ScrollBarP.x, ScrollBarP.y + errory, ScrollBarP.x,
+								ScrollBarP.y + ScrollBarS.height - errory, 2000);
+						break;
+
+					case "LEFT":
+						break;
+
+					case "RIGHT":
+						break;
+					}
+					targetElement = driver[i].findElement(By.xpath(appInput));
+					targetElementP = targetElement.getLocation();
+				}
+
+				switch (scroll.toString()) {
+
+				case "DOWN":
+					if (targetElementP.y + targetElementS.height > ScrollBarP.y + ScrollBarS.height) {
+						driver[i].swipe(targetElementP.x, targetElementP.y - errory, targetElementP.x,
+								ScrollBarP.y + errory, 2000);
+					}
+
+					break;
+				case "UP":
+					if (targetElementP.y < ScrollBarP.y) {
+						driver[i].swipe(targetElementP.x, targetElementP.y + targetElementS.height + errory,
+								targetElementP.x, ScrollBarS.height, 2000);
+					}
+
+					break;
+				case "LEFT":
+					break;
+				case "RIGHT":
+					break;
+				}
+
+				wait[i].until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appInput))).click();
+				//driver[i].findElement(By.xpath(appInput)).click();
+
+			} catch (Exception w) {
+				System.out.println("Can't find " + appInput);
+			}
+		}
+
+	}
+
 	public void QuitAPP() {
 		for (int i = 0; i < driver.length; i++) {
 			driver[i].quit();
@@ -479,6 +573,13 @@ public class method {
 
 			driver[i].deviceAction("Power");
 
+		}
+	}
+
+	public void Menu() {
+		for (int i = 0; i < driver.length; i++) {
+
+			driver[i].deviceAction("Recent Apps");
 		}
 	}
 

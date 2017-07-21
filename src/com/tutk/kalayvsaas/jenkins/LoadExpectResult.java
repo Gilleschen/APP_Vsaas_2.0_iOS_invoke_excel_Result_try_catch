@@ -15,7 +15,7 @@ public class LoadExpectResult {
 		XSSFSheet sheet;
 
 		try {
-			workbook = new XSSFWorkbook(new FileInputStream("C:\\TestScript.xlsm"));
+			workbook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm"));
 			sheet = workbook.getSheet("ExpectResult");// hard code
 			ResultList = new ArrayList<String>();
 			int i = 1;

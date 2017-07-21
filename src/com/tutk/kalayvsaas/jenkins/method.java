@@ -52,9 +52,10 @@ public class method {
 	XSSFSheet Sheet;
 
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, InstantiationException {
+			IllegalArgumentException, InvocationTargetException, InstantiationException, IOException {
 		invokeFunction();
 		System.out.println("測試結束!!!!!!!!");
+		Process proc = Runtime.getRuntime().exec("explorer C:\\TUTK_QA_TestTool\\TestReport");//開啟TestReport資料夾
 
 	}
 
@@ -158,10 +159,6 @@ public class method {
 				i = i + 3;
 				break;
 
-			case "Back":
-				methodName = "Back";
-				break;
-
 			case "Home":
 				methodName = "Home";
 				break;
@@ -236,9 +233,9 @@ public class method {
 		// 開啟Excel
 
 		try {
-			workBook = new XSSFWorkbook(new FileInputStream("C:\\TestReport\\TestReport.xlsm"));
+			workBook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find C:\\TestReport\\TestReport.xlsm");
+			System.out.println("[Error] Can't find C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm");
 		}
 
 		for (int i = 0; i < driver.length; i++) {
@@ -264,13 +261,13 @@ public class method {
 		// 執行寫入Excel後的存檔動作
 
 		try {
-			FileOutputStream out = new FileOutputStream(new File("C:\\TestReport\\TestReport.xlsm"));
+			FileOutputStream out = new FileOutputStream(new File("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
 			workBook.write(out);
 			out.close();
 			workBook.close();
 
 		} catch (Exception e) {
-			System.out.println("[Error] Can't find C:\\TestReport\\TestReport.xlsm");
+			System.out.println("[Error] Can't find C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm");
 		}
 
 		// CurrentCaseNumber = CurrentCaseNumber + 1;
@@ -335,18 +332,24 @@ public class method {
 		Dimension s;// 元件大小
 		WebElement e;
 		for (int i = 0; i < driver.length; i++) {
-			e = driver[i].findElement(By.xpath(appElemnt));
-			s = e.getSize();
-			p = e.getLocation();
-			int errorX = (int) Math.round(s.width * 0.01);
-			int errorY = (int) Math.round(s.height * 0.01);
-			for (int j = 0; j < iterative; j++) {
-				if (scroll.equals("DOWN")) {// 畫面向下捲動
-					driver[i].swipe(p.x + errorX, s.height - errorY, p.x + errorX, p.y + errorY, 1000);
-				} else if (scroll.equals("UP")) {// 畫面向上捲動
-					driver[i].swipe(p.x + errorX, p.y + errorY, p.x + errorX, s.height - errorY, 1000);
+
+			try {
+				e = driver[i].findElement(By.xpath(appElemnt));
+				s = e.getSize();
+				p = e.getLocation();
+				int errorX = (int) Math.round(s.width * 0.1);
+				int errorY = (int) Math.round(s.height * 0.1);
+				for (int j = 0; j < iterative; j++) {
+					if (scroll.equals("DOWN")) {// 畫面向下捲動
+						driver[i].swipe(p.x + errorX, p.y + s.height - errorY, p.x + errorX, p.y + errorY, 1000);
+					} else if (scroll.equals("UP")) {// 畫面向上捲動
+						driver[i].swipe(p.x + errorX, p.y + errorY, p.x + errorX, p.y + s.height - errorY, 1000);
+					}
 				}
+			} catch (Exception w) {
+				System.out.println("[Error] Can't find " + appElemnt);
 			}
+
 		}
 	}
 
@@ -355,18 +358,23 @@ public class method {
 		Dimension s;// 元件大小
 		WebElement e;
 		for (int i = 0; i < driver.length; i++) {
-			e = driver[i].findElement(By.xpath(appElemnt));
-			s = e.getSize();
-			p = e.getLocation();
-			int errorX = (int) Math.round(s.getWidth() * 0.01);
-			int errorY = (int) Math.round(s.getHeight() * 0.01);
-			for (int j = 0; j < iterative; j++) {
-				if (scroll.equals("RIGHT")) {// 畫面向右捲動
-					driver[i].swipe(p.x + errorX, p.y + errorY, s.width - errorX, p.y + errorY, 1000);
-				} else if (scroll.equals("LEFT")) {// 畫面向左捲動
-					driver[i].swipe(s.width - errorX, p.y + errorY, p.x + errorX, p.y + errorY, 1000);
+			try {
+				e = driver[i].findElement(By.xpath(appElemnt));
+				s = e.getSize();
+				p = e.getLocation();
+				int errorX = (int) Math.round(s.getWidth() * 0.1);
+				int errorY = (int) Math.round(s.getHeight() * 0.1);
+				for (int j = 0; j < iterative; j++) {
+					if (scroll.equals("RIGHT")) {// 畫面向右捲動
+						driver[i].swipe(p.x + errorX, p.y + errorY, p.x + s.width - errorX, p.y + errorY, 1000);
+					} else if (scroll.equals("LEFT")) {// 畫面向左捲動
+						driver[i].swipe(p.x + s.width - errorX, p.y + errorY, p.x + errorX, p.y + errorY, 1000);
+					}
 				}
+			} catch (Exception w) {
+				System.out.println("[Error] Can't find " + appElemnt);
 			}
+
 		}
 	}
 
@@ -403,57 +411,76 @@ public class method {
 				int errory = (int) Math.round(ScrollBarS.height * 0.1);
 				int errorx = (int) Math.round(ScrollBarS.width * 0.1);
 
-				while (targetElementP.y == 0 || targetElementP.x == 0) {// 根據搜尋元件的y座標或x座標是否為0，來判斷尋元件是否顯示於行動裝置畫面上
+				while (targetElementP.y == 0 || targetElementP.x < 0
+						|| targetElementP.x + targetElementS.width > ScrollBarP.x + ScrollBarS.width) {// 根據搜尋元件的y座標或x座標是否為0，來判斷尋元件是否顯示於行動裝置畫面上
 
 					switch (scroll.toString()) {
 
-					case "DOWN"://向下搜尋
+					case "DOWN":// 向下搜尋
 						driver[i].swipe(ScrollBarP.x, ScrollBarS.height + ScrollBarP.y - errory, ScrollBarP.x,
-								ScrollBarP.y, 2000);
+								ScrollBarP.y + errory, 2000);
 						break;
 
-					case "UP"://向上搜尋
+					case "UP":// 向上搜尋
 						driver[i].swipe(ScrollBarP.x, ScrollBarP.y + errory, ScrollBarP.x,
 								ScrollBarP.y + ScrollBarS.height - errory, 2000);
 						break;
 
-					case "LEFT":
+					case "LEFT":// 畫面向左捲動(觀看畫面右方內容)
+						driver[i].swipe(ScrollBarP.x + ScrollBarS.width - errorx, ScrollBarP.y, ScrollBarP.x + errorx,
+								ScrollBarP.y, 2000);
 						break;
 
-					case "RIGHT":
+					case "RIGHT":// 畫面向右捲動(觀看畫面左方內容)
+						driver[i].swipe(ScrollBarP.x + errorx, ScrollBarP.y, ScrollBarP.x + ScrollBarS.width - errorx,
+								ScrollBarP.y, 2000);
 						break;
 					}
 					targetElement = driver[i].findElement(By.xpath(appInput));
 					targetElementP = targetElement.getLocation();
 				}
 
+				// 當搜尋元件出現於畫面上後，再將搜尋元件完整移動至捲軸的UI範圍內，目的：避免搜尋元件部分UI被捲軸的UI擋住，導致無法正確Click()元件
 				switch (scroll.toString()) {
 
 				case "DOWN":
+					// 判斷搜尋元件UI是否被捲軸的UI擋住
 					if (targetElementP.y + targetElementS.height > ScrollBarP.y + ScrollBarS.height) {
 						driver[i].swipe(targetElementP.x, targetElementP.y - errory, targetElementP.x,
 								ScrollBarP.y + errory, 2000);
 					}
-
 					break;
+
 				case "UP":
+					// 判斷搜尋元件UI是否被捲軸的UI擋住
 					if (targetElementP.y < ScrollBarP.y) {
 						driver[i].swipe(targetElementP.x, targetElementP.y + targetElementS.height + errory,
-								targetElementP.x, ScrollBarS.height, 2000);
+								targetElementP.x, ScrollBarP.y + ScrollBarS.height - errory, 2000);
+					}
+					break;
+
+				case "LEFT":
+					if (targetElementP.x + targetElementS.width > ScrollBarP.x + ScrollBarS.width) {
+						driver[i].swipe(targetElementP.x - errorx, ScrollBarP.y, ScrollBarP.x + errorx, ScrollBarP.y,
+								2000);
 					}
 
 					break;
-				case "LEFT":
-					break;
+
 				case "RIGHT":
+					if (targetElementP.x < 0) {
+						driver[i].swipe(targetElementP.x + targetElementS.width + errorx, ScrollBarP.y,
+								ScrollBarP.x + ScrollBarS.width - errorx, ScrollBarP.y, 2000);
+					}
 					break;
 				}
 
 				wait[i].until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appInput))).click();
-				//driver[i].findElement(By.xpath(appInput)).click();
+				// driver[i].findElement(By.xpath(appInput)).click();
 
 			} catch (Exception w) {
-				System.out.println("Can't find " + appInput);
+				System.out.print("[Error] Can't find " + appElemnt);
+				System.out.println("[Error] Can't find " +appInput);
 			}
 		}
 
@@ -478,9 +505,9 @@ public class method {
 		}
 
 		try {
-			System.out.println("[driver] [start] sleep(): " + NewString + " second...");
+			System.out.println("[driver] [start] Sleep(): " + NewString + " second...");
 			Thread.sleep(Integer.valueOf(NewString) * 1000);// 將字串轉成整數
-			System.out.println("[driver] [end] sleep");
+			System.out.println("[driver] [end] Sleep");
 		} catch (Exception e) {
 			;
 		}
@@ -539,14 +566,14 @@ public class method {
 				cap[i].setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName.get(i));
 				cap[i].setCapability(IOSMobileCapabilityType.BUNDLE_ID, TestCase.DeviceInformation.BundleID);
 				cap[i].setCapability(SeeTestCapabilityType.REPORT_FORMAT, "xml");
-				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TestReport");// Report路徑
+				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TUTK_QA_TestTool\\TestReport");// Report路徑
 				cap[i].setCapability(SeeTestCapabilityType.TEST_NAME, TestCase.CaseList.get(CurrentCaseNumber));// TestCase名稱
 
 				try {
 					driver[j] = new SeeTestIOSDriver(new URL("http://localhost:" + port + "/wd/hub"), cap[j]);
 				} catch (Exception e) {
-					System.out.print("[Error] Can't find UDID: " + TestCase.DeviceInformation.deviceName.get(i));
-					System.out.println("or can't find BundleID: " + TestCase.DeviceInformation.BundleID);
+					System.out.print("[Error] Can't find UDID:" + TestCase.DeviceInformation.deviceName.get(i));
+					System.out.println(" or can not find BundleID: " + TestCase.DeviceInformation.BundleID);
 				}
 				break;
 			}

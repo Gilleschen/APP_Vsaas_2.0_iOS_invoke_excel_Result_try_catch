@@ -20,7 +20,7 @@ public class LoadTestCase {
 		XSSFSheet sheet;
 
 		try {
-			workbook = new XSSFWorkbook(new FileInputStream("C:\\TestScript.xlsm"));
+			workbook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm"));
 
 			CaseList = new ArrayList<String>();
 			StepList = new ArrayList<String>();
@@ -86,7 +86,7 @@ public class LoadTestCase {
 		// 執行寫入Excel後的存檔動作
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(new File("C:\\TestReport\\TestReport.xlsm"));// 另存新檔
+			out = new FileOutputStream(new File("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));// 另存新檔
 			workbook.write(out);
 			out.close();
 			workbook.close();

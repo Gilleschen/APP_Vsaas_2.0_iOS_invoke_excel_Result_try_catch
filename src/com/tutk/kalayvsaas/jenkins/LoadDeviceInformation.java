@@ -19,7 +19,7 @@ public class LoadDeviceInformation {
 
 		try {
 
-			workBook = new XSSFWorkbook(new FileInputStream("C:\\TestScript.xlsm"));//hard code
+			workBook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestTool\\TestScript.xlsm"));//hard code
 			Sheet = workBook.getSheet("APP&Device");//hard code
 			deviceName = new ArrayList<String>();
 			platformVersion = new ArrayList<String>();
@@ -48,7 +48,7 @@ public class LoadDeviceInformation {
 				;
 			}
 
-			System.out.println("測試設備(UDID/Android Version)");
+			System.out.println("測試設備(UDID/iOS Version)");
 
 			for (int i = 0; i < deviceName.size(); i++) {
 				System.out.print(deviceName.get(i) + "/");

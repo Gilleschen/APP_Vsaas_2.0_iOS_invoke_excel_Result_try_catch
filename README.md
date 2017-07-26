@@ -6,7 +6,7 @@
 
 2. 新增測試手機至Appium studio並啟動手機 (請參考<a href="https://docs.experitest.com/display/public/AS/Android+-+Build+your+first+test">Getting started</a>)
 
-3. 下載<a href="https://github.com/Gilleschen/iOS_invoke_excel/raw/master/APP_iOS.jar">iOS_Android.jar</a>及<a href="https://github.com/Gilleschen/iOS_invoke_excel/raw/master/TestScript.xlsm">TestScript.xlsm</a>
+3. 下載<a href="https://github.com/Gilleschen/iOS_invoke_excel/raw/master/APP_iOS.jar">APP_iOS.jar</a>及<a href="https://github.com/Gilleschen/iOS_invoke_excel/raw/master/TestScript.xlsm">TestScript.xlsm</a>
 
 #### 測試腳本建立說明：
 

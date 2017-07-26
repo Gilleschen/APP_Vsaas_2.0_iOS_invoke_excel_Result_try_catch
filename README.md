@@ -79,9 +79,11 @@
  
  ![image](https://github.com/Gilleschen/APP_Vsaas_2.0_Android_invoke_excel_Result_try_catch/blob/master/picture/Result_example.PNG)
 
-5. 最後將TestScript.xlsm複製至C:\ (C:\TestScript.xlsm)(檔名及副檔名請勿更改)
+5. 於C:\建立TUTK_QA_TestTool資料夾 (C:\TUTK_QA_TestTool)
 
-6. 於C:\建立TestReport資料夾 (C:\TestReport)
+6. 於TUTK_QA_TestTool建立TestTool資料夾，將TestScript.xlsm複製至C:\TUTK_QA_TestTool\TestTool (C:\TUTK_QA_TestTool\TestTool\TestScript.xlsm)(檔名及副檔名請勿更改)
+
+7. 於TUTK_QA_TestTool建立TestReport資料夾 (C:\TUTK_QA_TestTool\TestReport)
 
 #### 開始測試
 

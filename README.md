@@ -18,11 +18,11 @@
 
 4. 開啟TestScript.xlsm並允許啟動巨集 (已建立APP&Device、ExpectResult及說明工作表)
 
-5. APP&Device工作表輸入BundleID、測試手機UDID、測試手機OS版本、待測試腳本(以_TestCase結尾的工作表)及APP_iOS.jar路徑，範例如下圖：
+5. APP&Device工作表輸入BundleID、測試手機UDID、測試手機OS版本、待測試腳本(以_TestScript結尾的工作表)及APP_iOS.jar路徑，範例如下圖：
 
 ![image](https://github.com/Gilleschen/iOS_invoke_excel/blob/master/picture/app_device_example.PNG)
 
-6. 建立腳本(建立案列Case)：新增一工作表，工作表名稱須以_TestCase為結尾 (e.g. Login_TestCase)，目前支援指令如下: (大小寫有分，使用方式請參考TestScript.xlsm內說明工作表)
+6. 建立腳本(建立案列Case)：新增一工作表，工作表名稱須以_TestScript為結尾 (e.g. Login_TestScript)，目前支援指令如下: (大小寫有分，使用方式請參考TestScript.xlsm內說明工作表)
 
         CaseName=>測試案列名稱(各案列開始時第一個填寫項目，必填!!!)
 
@@ -92,7 +92,7 @@
         
         2.5 執行腳本：開始執行指定的工作表腳本，建議執行腳本前請確認前4項功能無誤
         
-        註：2.2、2.3及2.4功能僅檢查以_TestCase為結尾且未隱藏的工作表 
+        註：2.2、2.3及2.4功能僅檢查以_TestScript為結尾且未隱藏的工作表 
 
 #### Excel 測試報告
 

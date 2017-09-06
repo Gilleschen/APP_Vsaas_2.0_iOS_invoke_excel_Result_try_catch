@@ -9,8 +9,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Calendar;
 
-
-
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -53,14 +51,22 @@ public class method {
 	String element[] = new String[driver.length];
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
 	static Boolean CommandError = true;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
-	
 
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException, IOException {
+		initial();
 		invokeFunction();
 		System.out.println("測試結束!!!!!!!!");
 		Process proc = Runtime.getRuntime().exec("explorer C:\\TUTK_QA_TestTool\\TestReport");// 開啟TestReport資料夾
 
+	}
+
+	public static void initial() {// 初始化CaseErrorList矩陣
+		for (int i = 0; i < CaseErrorList.length; i++) {
+			for (int j = 0; j < CaseErrorList[i].length; j++) {
+				CaseErrorList[i][j] = "";
+			}
+		}
 	}
 
 	public static void invokeFunction() throws NoSuchMethodException, SecurityException, IllegalAccessException,
@@ -517,7 +523,7 @@ public class method {
 	public void QuitAPP() {
 		for (int j = 0; j < driver.length; j++) {
 			driver[j].quit();// 離開APP後，寫入測試結果Pass或Error
-			
+
 			// 開啟Excel
 			try {
 				workBook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
@@ -672,6 +678,5 @@ public class method {
 			driver[i].deviceAction("Recent Apps");
 		}
 	}
-
 
 }

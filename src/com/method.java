@@ -2,16 +2,14 @@ package com;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+
+
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -31,14 +29,19 @@ import io.appium.java_client.remote.IOSMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 
 public class method {
+
 	int port = 4723;// Appium studio port
 	int device_timeout = 60;// 60sec
 	int command_timeout = 30;// 30sec
 	LoadExpectResult ExpectResult = new LoadExpectResult();
 	static LoadTestCase TestCase = new LoadTestCase();
+	static String CaseErrorList[][] = new String[TestCase.CaseList.size()][TestCase.DeviceInformation.deviceName
+			.size()];// 紀錄各案例於各裝置之指令結果 (2維陣列)CaseErrorList[CaseList][Devices]
+	String ErrorList[] = new String[TestCase.DeviceInformation.deviceName.size()];// 紀錄各裝置之指令結果
 	static SeeTestIOSDriver driver[] = new SeeTestIOSDriver[TestCase.DeviceInformation.deviceName.size()];
 	WebDriverWait[] wait = new WebDriverWait[driver.length];
 	static XSSFWorkbook workBook;
+	XSSFSheet Sheet;
 	static String appElemnt;// APP元件名稱
 	static String appInput;// 輸入值
 	static String appInputXpath;// 輸入值的Xpath格式
@@ -49,7 +52,8 @@ public class method {
 	// static String appElemntarray;// 搜尋的多筆類似元件
 	String element[] = new String[driver.length];
 	static int CurrentCaseNumber = -1;// 目前執行到第幾個測試案列
-	XSSFSheet Sheet;
+	static Boolean CommandError = true;// 判定執行的指令是否出現錯誤；ture為正確；false為錯誤
+	
 
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException, IOException {
@@ -65,126 +69,131 @@ public class method {
 		Class c = obj.getClass();
 		String methodName = null;
 
-		for (int i = 0; i < TestCase.StepList.size(); i++) {
+		for (int CurrentCase = 0; CurrentCase < TestCase.StepList.size(); CurrentCase++) {
+			CommandError = true;// 預設CommandError為True
 
-			switch (TestCase.StepList.get(i).toString()) {
+			for (int CurrentCaseStep = 0; CurrentCaseStep < TestCase.StepList.get(CurrentCase)
+					.size(); CurrentCaseStep++) {
+				if (!CommandError) {
+					break;// 若目前測試案例出現CommandError=false，則跳出目前案例並執行下一個案例
+				}
+				switch (TestCase.StepList.get(CurrentCase).get(CurrentCaseStep).toString()) {
+				case "LaunchAPP":
+					methodName = "LaunchAPP";
+					break;
 
-			case "LaunchAPP":
-				methodName = "LaunchAPP";
-				break;
+				case "ByXpath_SendKey":
+					methodName = "ByXpath_SendKey";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
+					CurrentCaseStep = CurrentCase + 2;
+					break;
 
-			case "ByXpath_SendKey":
-				methodName = "ByXpath_SendKey";
-				appElemnt = TestCase.StepList.get(i + 1);
-				appInput = TestCase.StepList.get(i + 2);
-				i = i + 2;
-				break;
+				case "ByXpath_Click":
+					methodName = "ByXpath_Click";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCase + 1;
+					break;
 
-			case "ByXpath_Click":
-				methodName = "ByXpath_Click";
-				appElemnt = TestCase.StepList.get(i + 1);
-				i = i + 1;
-				break;
+				case "ByXpath_Wait":
+					methodName = "ByXpath_Wait";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCase + 1;
+					break;
 
-			case "ByXpath_Wait":
-				methodName = "ByXpath_Wait";
-				appElemnt = TestCase.StepList.get(i + 1);
-				i = i + 1;
-				break;
+				case "ByXpath_Swipe":
+					methodName = "ByXpath_Swipe";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					toElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
+					CurrentCaseStep = CurrentCase + 2;
+					break;
 
-			case "ByXpath_Swipe":
-				methodName = "ByXpath_Swipe";
-				appElemnt = TestCase.StepList.get(i + 1);
-				toElemnt = TestCase.StepList.get(i + 2);
-				i = i + 2;
-				break;
+				case "HideKeyboard":
+					methodName = "HideKeyboard";
+					break;
 
-			case "HideKeyboard":
-				methodName = "HideKeyboard";
-				break;
+				case "ByXpath_Result":
+					methodName = "ByXpath_Result";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCase + 1;
+					break;
 
-			case "ByXpath_Result":
-				methodName = "ByXpath_Result";
-				appElemnt = TestCase.StepList.get(i + 1);
-				i = i + 1;
-				break;
+				case "Sleep":
+					methodName = "Sleep";
+					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCase + 1;
+					break;
 
-			case "Sleep":
-				methodName = "Sleep";
-				appInput = TestCase.StepList.get(i + 1);
-				i = i + 1;
-				break;
+				case "ScreenShot":
+					methodName = "ScreenShot";
+					break;
 
-			case "ScreenShot":
-				methodName = "ScreenShot";
-				break;
+				case "Orientation":
+					methodName = "Orientation";
+					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					CurrentCaseStep = CurrentCase + 1;
+					break;
 
-			case "Orientation":
-				methodName = "Orientation";
-				appInput = TestCase.StepList.get(i + 1);
-				i = i + 1;
-				break;
+				case "Swipe":
+					methodName = "Swipe";
+					startx = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1));
+					starty = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2));
+					endx = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3));
+					endy = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 4));
+					iterative = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 5));
+					CurrentCaseStep = CurrentCase + 5;
+					break;
 
-			case "Swipe":
-				methodName = "Swipe";
-				startx = Integer.valueOf(TestCase.StepList.get(i + 1));
-				starty = Integer.valueOf(TestCase.StepList.get(i + 2));
-				endx = Integer.valueOf(TestCase.StepList.get(i + 3));
-				endy = Integer.valueOf(TestCase.StepList.get(i + 4));
-				iterative = Integer.valueOf(TestCase.StepList.get(i + 5));
-				i = i + 5;
-				break;
+				case "ByXpath_Swipe_Vertical":
+					methodName = "ByXpath_Swipe_Vertical";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					scroll = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
+					iterative = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3));
+					CurrentCaseStep = CurrentCase + 3;
+					break;
 
-			case "ByXpath_Swipe_Vertical":
-				methodName = "ByXpath_Swipe_Vertical";
-				appElemnt = TestCase.StepList.get(i + 1);
-				scroll = TestCase.StepList.get(i + 2);
-				iterative = Integer.valueOf(TestCase.StepList.get(i + 3));
-				i = i + 3;
-				break;
+				case "ByXpath_Swipe_Horizontal":
+					methodName = "ByXpath_Swipe_Horizontal";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					scroll = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
+					iterative = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3));
+					CurrentCaseStep = CurrentCase + 3;
+					break;
 
-			case "ByXpath_Swipe_Horizontal":
-				methodName = "ByXpath_Swipe_Horizontal";
-				appElemnt = TestCase.StepList.get(i + 1);
-				scroll = TestCase.StepList.get(i + 2);
-				iterative = Integer.valueOf(TestCase.StepList.get(i + 3));
-				i = i + 3;
-				break;
+				case "ByXpath_Swipe_FindText_Click_iOS":
+					methodName = "ByXpath_Swipe_FindText_Click_iOS";
+					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
+					scroll = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
+					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3);
+					CurrentCaseStep = CurrentCase + 3;
+					break;
 
-			case "ByXpath_Swipe_FindText_Click_iOS":
-				methodName = "ByXpath_Swipe_FindText_Click_iOS";
-				appElemnt = TestCase.StepList.get(i + 1);
-				scroll = TestCase.StepList.get(i + 2);
-				appInput = TestCase.StepList.get(i + 3);
-				i = i + 3;
-				break;
+				case "Home":
+					methodName = "Home";
+					break;
 
-			case "Home":
-				methodName = "Home";
-				break;
+				case "Power":
+					methodName = "Power";
+					break;
 
-			case "Power":
-				methodName = "Power";
-				break;
+				case "ResetAPP":
+					methodName = "ResetAPP";
+					break;
 
-			case "ResetAPP":
-				methodName = "ResetAPP";
-				break;
+				case "Menu":
+					methodName = "Menu";
+					break;
 
-			case "Menu":
-				methodName = "Menu";
-				break;
+				case "QuitAPP":
+					methodName = "QuitAPP";
+					break;
 
-			case "QuitAPP":
-				methodName = "QuitAPP";
-				break;
+				}
 
+				Method method;
+				method = c.getMethod(methodName, new Class[] {});
+				method.invoke(c.newInstance());
 			}
-
-			Method method;
-			method = c.getMethod(methodName, new Class[] {});
-			method.invoke(c.newInstance());
-
 		}
 	}
 
@@ -194,9 +203,11 @@ public class method {
 			wait[i] = new WebDriverWait(driver[i], device_timeout);
 			try {
 				wait[i].until(ExpectedConditions.presenceOfElementLocated(By.xpath(appElemnt)));
-
+				ErrorList[i] = "Pass";
+				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
+				CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			}
 		}
 	}
@@ -278,8 +289,11 @@ public class method {
 		for (int i = 0; i < driver.length; i++) {
 			try {
 				driver[i].findElement(By.xpath(appElemnt)).sendKeys(appInput);
+				ErrorList[i] = "Pass";
+				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
+				CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			}
 		}
 	}
@@ -288,8 +302,11 @@ public class method {
 		for (int i = 0; i < driver.length; i++) {
 			try {
 				driver[i].findElement(By.xpath(appElemnt)).click();
+				ErrorList[i] = "Pass";
+				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
+				CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			}
 
 		}
@@ -303,9 +320,12 @@ public class method {
 				p2 = driver[i].findElement(By.xpath(toElemnt)).getLocation();
 				p1 = driver[i].findElement(By.xpath(appElemnt)).getLocation();
 				driver[i].swipe(p1.x, p1.y, p1.x, p1.y - (p1.y - p2.y), 1000);
+				ErrorList[i] = "Pass";
+				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
 				System.out.println("[Error] or Can't find " + toElemnt);
+				CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			}
 		}
 	}
@@ -346,8 +366,11 @@ public class method {
 						driver[i].swipe(p.x + errorX, p.y + errorY, p.x + errorX, p.y + s.height - errorY, 1000);
 					}
 				}
+				ErrorList[i] = "Pass";
+				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception w) {
 				System.out.println("[Error] Can't find " + appElemnt);
+				CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			}
 
 		}
@@ -371,8 +394,11 @@ public class method {
 						driver[i].swipe(p.x + s.width - errorX, p.y + errorY, p.x + errorX, p.y + errorY, 1000);
 					}
 				}
+				ErrorList[i] = "Pass";
+				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception w) {
 				System.out.println("[Error] Can't find " + appElemnt);
+				CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			}
 
 		}
@@ -477,18 +503,55 @@ public class method {
 
 				wait[i].until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appInput))).click();
 				// driver[i].findElement(By.xpath(appInput)).click();
-
+				ErrorList[i] = "Pass";
+				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception w) {
 				System.out.print("[Error] Can't find " + appElemnt);
 				System.out.println("[Error] Can't find " + appInput);
+				CommandError = false;// 若找不到指定元件，則設定CommandError=false
 			}
 		}
 
 	}
 
 	public void QuitAPP() {
-		for (int i = 0; i < driver.length; i++) {
-			driver[i].quit();
+		for (int j = 0; j < driver.length; j++) {
+			driver[j].quit();// 離開APP後，寫入測試結果Pass或Error
+			
+			// 開啟Excel
+			try {
+				workBook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
+			} catch (Exception e) {
+				System.out.println("[Error] Can't find C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm");
+			}
+			for (int i = 0; i < driver.length; i++) {
+
+				if (TestCase.DeviceInformation.deviceName.get(i).toString().length() > 20) {// Excel工作表名稱最常31字元因，故需判斷UDID長度是否大於31
+					char[] NewUdid = new char[20];// 因需包含_TestReport字串(共11字元)，故設定20位字元陣列(31-11)
+					TestCase.DeviceInformation.deviceName.get(i).toString().getChars(0, 20, NewUdid, 0);// 取出UDID前20字元給NewUdid
+					Sheet = workBook.getSheet(String.valueOf(NewUdid) + "_TestReport");// 根據NewUdid，指定某台裝置的TestReport
+																						// sheet
+				} else {
+					Sheet = workBook.getSheet(TestCase.DeviceInformation.deviceName.get(i).toString() + "_TestReport");// 指定某台裝置的TestReport
+																														// sheet
+				}
+
+				if (CaseErrorList[CurrentCaseNumber][i].equals("Pass")) {// 取出CaseErrorList之第CurrentCaseNumber個測項中的第i台行動裝置之結果
+					Sheet.getRow(CurrentCaseNumber + 1).getCell(1).setCellValue("Pass");// 填入第i台行動裝置之第CurrentCaseNumber個測項結果Pass
+				}
+
+			}
+			// 執行寫入Excel後的存檔動作
+			try {
+				FileOutputStream out = new FileOutputStream(
+						new File("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
+				workBook.write(out);
+				out.close();
+				workBook.close();
+			} catch (Exception e) {
+				System.out.println("[Error] Can't find C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm");
+			}
+
 		}
 	}
 
@@ -609,5 +672,6 @@ public class method {
 			driver[i].deviceAction("Recent Apps");
 		}
 	}
+
 
 }

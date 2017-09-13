@@ -94,6 +94,15 @@
         
         註：2.2、2.3及2.4功能僅檢查以_TestScript為結尾且未隱藏的工作表 
 
+3. 功能異常排除：
+
+        3.1 移除增益集自訂工具列，如下圖：
+        
+      ![image](https://github.com/Gilleschen/Appium_Auto_Testing_Android/blob/master/picture/troubleshooting.png)
+        
+        3.2 存檔並關閉TestScript.xlsm
+        
+        3.3 重新開啟TestScript.xlsm
 #### Excel 測試報告
 
 1. 開啟C:\TUTK_QA_TestTool\TestReport\TestReport.xlsm

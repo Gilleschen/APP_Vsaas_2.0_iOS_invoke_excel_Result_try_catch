@@ -34,37 +34,37 @@ public class method {
 	LoadExpectResult ExpectResult = new LoadExpectResult();
 	static LoadTestCase TestCase = new LoadTestCase();
 	static String CaseErrorList[][] = new String[TestCase.CaseList.size()][TestCase.DeviceInformation.deviceName
-			.size()];// ç´€éŒ„å„æ¡ˆä¾‹æ–¼å„è£ç½®ä¹‹æŒ‡ä»¤çµæœ (2ç¶­é™£åˆ—)CaseErrorList[CaseList][Devices]
-	String ErrorList[] = new String[TestCase.DeviceInformation.deviceName.size()];// ç´€éŒ„å„è£ç½®ä¹‹æŒ‡ä»¤çµæœ
+			.size()];// ¬ö¿ı¦U®×¨Ò©ó¦U¸Ë¸m¤§«ü¥Oµ²ªG (2ºû°}¦C)CaseErrorList[CaseList][Devices]
+	String ErrorList[] = new String[TestCase.DeviceInformation.deviceName.size()];// ¬ö¿ı¦U¸Ë¸m¤§«ü¥Oµ²ªG
 	static SeeTestIOSDriver driver[] = new SeeTestIOSDriver[TestCase.DeviceInformation.deviceName.size()];
 	WebDriverWait[] wait = new WebDriverWait[driver.length];
 	static XSSFWorkbook workBook;
 	XSSFSheet Sheet;
-	static String appElemnt;// APPå…ƒä»¶åç¨±
-	static String appInput;// è¼¸å…¥å€¼
-	static String appInputXpath;// è¼¸å…¥å€¼çš„Xpathæ ¼å¼
-	static String toElemnt;// APPå…ƒä»¶åç¨±
-	static int startx, starty, endx, endy;// Swipeç§»å‹•åº§æ¨™
-	static int iterative;// ç•«é¢æ»‘å‹•æ¬¡æ•¸
-	static String scroll;// ç•«é¢æ²å‹•æ–¹å‘ (DOWN/UP/LEFT/RIGHT)
-	// static String appElemntarray;// æœå°‹çš„å¤šç­†é¡ä¼¼å…ƒä»¶
+	static String appElemnt;// APP¤¸¥ó¦WºÙ
+	static String appInput;// ¿é¤J­È
+	static String appInputXpath;// ¿é¤J­ÈªºXpath®æ¦¡
+	static String toElemnt;// APP¤¸¥ó¦WºÙ
+	static int startx, starty, endx, endy;// Swipe²¾°Ê®y¼Ğ
+	static int iterative;// µe­±·Æ°Ê¦¸¼Æ
+	static String scroll;// µe­±±²°Ê¤è¦V (DOWN/UP/LEFT/RIGHT)
+	// static String appElemntarray;// ·j´Mªº¦hµ§Ãş¦ü¤¸¥ó
 	String element[] = new String[driver.length];
-	static int CurrentCaseNumber = -1;// ç›®å‰åŸ·è¡Œåˆ°ç¬¬å¹¾å€‹æ¸¬è©¦æ¡ˆåˆ—
-	static Boolean CommandError = true;// åˆ¤å®šåŸ·è¡Œçš„æŒ‡ä»¤æ˜¯å¦å‡ºç¾éŒ¯èª¤ï¼›tureç‚ºæ­£ç¢ºï¼›falseç‚ºéŒ¯èª¤
+	static int CurrentCaseNumber = -1;// ¥Ø«e°õ¦æ¨ì²Ä´X­Ó´ú¸Õ®×¦C
+	static Boolean CommandError = true;// §P©w°õ¦æªº«ü¥O¬O§_¥X²{¿ù»~¡Fture¬°¥¿½T¡Ffalse¬°¿ù»~
 
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, InstantiationException, IOException {
 		initial();
 		invokeFunction();
-		System.out.println("æ¸¬è©¦çµæŸ!!!!!!!!");
-		Process proc = Runtime.getRuntime().exec("explorer C:\\TUTK_QA_TestTool\\TestReport");// é–‹å•ŸTestReportè³‡æ–™å¤¾
+		System.out.println("´ú¸Õµ²§ô!!!!!!!!");
+		Process proc = Runtime.getRuntime().exec("explorer C:\\TUTK_QA_TestTool\\TestReport");// ¶}±ÒTestReport¸ê®Æ§¨
 
 	}
 
-	public static void initial() {// åˆå§‹åŒ–CaseErrorListçŸ©é™£
+	public static void initial() {// ªì©l¤ÆCaseErrorList¯x°}
 		for (int i = 0; i < CaseErrorList.length; i++) {
 			for (int j = 0; j < CaseErrorList[i].length; j++) {
-				CaseErrorList[i][j] = "";//å¡«å…¥ç©ºå­—ä¸²ï¼Œé¿å…å–å€¼æ™‚ï¼Œå‡ºç¾éŒ¯èª¤
+				CaseErrorList[i][j] = "";//¶ñ¤JªÅ¦r¦ê¡AÁ×§K¨ú­È®É¡A¥X²{¿ù»~
 			}
 		}
 	}
@@ -76,12 +76,12 @@ public class method {
 		String methodName = null;
 
 		for (int CurrentCase = 0; CurrentCase < TestCase.StepList.size(); CurrentCase++) {
-			CommandError = true;// é è¨­CommandErrorç‚ºTrue
+			CommandError = true;// ¹w³]CommandError¬°True
 
 			for (int CurrentCaseStep = 0; CurrentCaseStep < TestCase.StepList.get(CurrentCase)
 					.size(); CurrentCaseStep++) {
 				if (!CommandError) {
-					break;// è‹¥ç›®å‰æ¸¬è©¦æ¡ˆä¾‹å‡ºç¾CommandError=falseï¼Œå‰‡è·³å‡ºç›®å‰æ¡ˆä¾‹ä¸¦åŸ·è¡Œä¸‹ä¸€å€‹æ¡ˆä¾‹
+					break;// ­Y¥Ø«e´ú¸Õ®×¨Ò¥X²{CommandError=false¡A«h¸õ¥X¥Ø«e®×¨Ò¨Ã°õ¦æ¤U¤@­Ó®×¨Ò
 				}
 				switch (TestCase.StepList.get(CurrentCase).get(CurrentCaseStep).toString()) {
 				case "LaunchAPP":
@@ -92,26 +92,26 @@ public class method {
 					methodName = "ByXpath_SendKey";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
 					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
-					CurrentCaseStep = CurrentCase + 2;
+					CurrentCaseStep = CurrentCaseStep + 2;
 					break;
 
 				case "ByXpath_Click":
 					methodName = "ByXpath_Click";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					CurrentCaseStep = CurrentCase + 1;
+					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
 				case "ByXpath_Wait":
 					methodName = "ByXpath_Wait";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					CurrentCaseStep = CurrentCase + 1;
+					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
 				case "ByXpath_Swipe":
 					methodName = "ByXpath_Swipe";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
 					toElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
-					CurrentCaseStep = CurrentCase + 2;
+					CurrentCaseStep = CurrentCaseStep + 2;
 					break;
 
 				case "HideKeyboard":
@@ -121,13 +121,13 @@ public class method {
 				case "ByXpath_Result":
 					methodName = "ByXpath_Result";
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					CurrentCaseStep = CurrentCase + 1;
+					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
 				case "Sleep":
 					methodName = "Sleep";
 					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					CurrentCaseStep = CurrentCase + 1;
+					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
 				case "ScreenShot":
@@ -137,7 +137,7 @@ public class method {
 				case "Orientation":
 					methodName = "Orientation";
 					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
-					CurrentCaseStep = CurrentCase + 1;
+					CurrentCaseStep = CurrentCaseStep + 1;
 					break;
 
 				case "Swipe":
@@ -147,7 +147,7 @@ public class method {
 					endx = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3));
 					endy = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 4));
 					iterative = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 5));
-					CurrentCaseStep = CurrentCase + 5;
+					CurrentCaseStep = CurrentCaseStep + 5;
 					break;
 
 				case "ByXpath_Swipe_Vertical":
@@ -155,7 +155,7 @@ public class method {
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
 					scroll = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
 					iterative = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3));
-					CurrentCaseStep = CurrentCase + 3;
+					CurrentCaseStep = CurrentCaseStep + 3;
 					break;
 
 				case "ByXpath_Swipe_Horizontal":
@@ -163,7 +163,7 @@ public class method {
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
 					scroll = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
 					iterative = Integer.valueOf(TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3));
-					CurrentCaseStep = CurrentCase + 3;
+					CurrentCaseStep = CurrentCaseStep + 3;
 					break;
 
 				case "ByXpath_Swipe_FindText_Click_iOS":
@@ -171,7 +171,7 @@ public class method {
 					appElemnt = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 1);
 					scroll = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 2);
 					appInput = TestCase.StepList.get(CurrentCase).get(CurrentCaseStep + 3);
-					CurrentCaseStep = CurrentCase + 3;
+					CurrentCaseStep = CurrentCaseStep + 3;
 					break;
 
 				case "Home":
@@ -213,13 +213,13 @@ public class method {
 				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
-				CommandError = false;// è‹¥æ‰¾ä¸åˆ°æŒ‡å®šå…ƒä»¶ï¼Œå‰‡è¨­å®šCommandError=false
+				CommandError = false;// ­Y§ä¤£¨ì«ü©w¤¸¥ó¡A«h³]©wCommandError=false
 			}
 		}
 	}
 
 	public void ByXpath_Result() {
-		boolean result[] = new boolean[driver.length];// æœªçµ¦å®šBooleanå€¼ï¼Œé è¨­ç‚ºFalse
+		boolean result[] = new boolean[driver.length];// ¥¼µ¹©wBoolean­È¡A¹w³]¬°False
 		boolean ErrorResult[] = new boolean[driver.length];
 
 		for (int i = 0; i < driver.length; i++) {
@@ -228,14 +228,14 @@ public class method {
 				element[i] = driver[i].findElement(By.xpath(appElemnt)).getAttribute("text");
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
-				element[i] = "ERROR";// æ‰¾ä¸åˆ°è©²ç‰©ä»¶ï¼Œå›å‚³Error
+				element[i] = "ERROR";// §ä¤£¨ì¸Óª«¥ó¡A¦^¶ÇError
 			}
 
 			if (element[i].equals("ERROR")) {
 				ErrorResult[i] = true;
 
 			} else {
-				// å›å‚³æ¸¬è©¦æ¡ˆä¾‹æ¸…å–®çš„åç¨±çµ¦ExpectResult.LoadExpectResultï¼Œä¸¦å­˜æ”¾æœŸæœ›çµæœè‡³ResultListæ¸…å–®
+				// ¦^¶Ç´ú¸Õ®×¨Ò²M³æªº¦WºÙµ¹ExpectResult.LoadExpectResult¡A¨Ã¦s©ñ´Á±æµ²ªG¦ÜResultList²M³æ
 				ExpectResult.LoadExpectResult(TestCase.CaseList.get(CurrentCaseNumber).toString());
 				for (int j = 0; j < ExpectResult.ResultList.size(); j++) {
 					if (element[i].equals(ExpectResult.ResultList.get(j)) == true) {
@@ -247,7 +247,7 @@ public class method {
 				}
 			}
 		}
-		// é–‹å•ŸExcel
+		// ¶}±ÒExcel
 
 		try {
 			workBook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
@@ -257,13 +257,13 @@ public class method {
 
 		for (int i = 0; i < driver.length; i++) {
 
-			if (TestCase.DeviceInformation.deviceName.get(i).toString().length() > 20) {// Excelå·¥ä½œè¡¨åç¨±æœ€å¸¸31å­—å…ƒå› ï¼Œæ•…éœ€åˆ¤æ–·UDIDé•·åº¦æ˜¯å¦å¤§æ–¼31
-				char[] NewUdid = new char[20];// å› éœ€åŒ…å«_TestReportå­—ä¸²(å…±11å­—å…ƒ)ï¼Œæ•…è¨­å®š20ä½å­—å…ƒé™£åˆ—(31-11)
-				TestCase.DeviceInformation.deviceName.get(i).toString().getChars(0, 20, NewUdid, 0);// å–å‡ºUDIDå‰20å­—å…ƒçµ¦NewUdid
-				Sheet = workBook.getSheet(String.valueOf(NewUdid) + "_TestReport");// æ ¹æ“šNewUdidï¼ŒæŒ‡å®šæŸå°è£ç½®çš„TestReport
+			if (TestCase.DeviceInformation.deviceName.get(i).toString().length() > 20) {// Excel¤u§@ªí¦WºÙ³Ì±`31¦r¤¸¦]¡A¬G»İ§PÂ_UDIDªø«×¬O§_¤j©ó31
+				char[] NewUdid = new char[20];// ¦]»İ¥]§t_TestReport¦r¦ê(¦@11¦r¤¸)¡A¬G³]©w20¦ì¦r¤¸°}¦C(31-11)
+				TestCase.DeviceInformation.deviceName.get(i).toString().getChars(0, 20, NewUdid, 0);// ¨ú¥XUDID«e20¦r¤¸µ¹NewUdid
+				Sheet = workBook.getSheet(String.valueOf(NewUdid) + "_TestReport");// ®Ú¾ÚNewUdid¡A«ü©w¬Y¥x¸Ë¸mªºTestReport
 																					// sheet
 			} else {
-				Sheet = workBook.getSheet(TestCase.DeviceInformation.deviceName.get(i).toString() + "_TestReport");// æŒ‡å®šæŸå°è£ç½®çš„TestReport
+				Sheet = workBook.getSheet(TestCase.DeviceInformation.deviceName.get(i).toString() + "_TestReport");// «ü©w¬Y¥x¸Ë¸mªºTestReport
 																													// sheet
 			}
 
@@ -275,7 +275,7 @@ public class method {
 				Sheet.getRow(CurrentCaseNumber + 1).createCell(1).setCellValue("Fail");
 			}
 		}
-		// åŸ·è¡Œå¯«å…¥Excelå¾Œçš„å­˜æª”å‹•ä½œ
+		// °õ¦æ¼g¤JExcel«áªº¦sÀÉ°Ê§@
 
 		try {
 			FileOutputStream out = new FileOutputStream(new File("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
@@ -299,7 +299,7 @@ public class method {
 				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
-				CommandError = false;// è‹¥æ‰¾ä¸åˆ°æŒ‡å®šå…ƒä»¶ï¼Œå‰‡è¨­å®šCommandError=false
+				CommandError = false;// ­Y§ä¤£¨ì«ü©w¤¸¥ó¡A«h³]©wCommandError=false
 			}
 		}
 	}
@@ -312,14 +312,14 @@ public class method {
 				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
-				CommandError = false;// è‹¥æ‰¾ä¸åˆ°æŒ‡å®šå…ƒä»¶ï¼Œå‰‡è¨­å®šCommandError=false
+				CommandError = false;// ­Y§ä¤£¨ì«ü©w¤¸¥ó¡A«h³]©wCommandError=false
 			}
 
 		}
 	}
 
 	public void ByXpath_Swipe() {
-		Point p1, p2;// p1 ç‚ºèµ·é»;p2ç‚ºçµ‚é»
+		Point p1, p2;// p1 ¬°°_ÂI;p2¬°²×ÂI
 
 		for (int i = 0; i < driver.length; i++) {
 			try {
@@ -331,7 +331,7 @@ public class method {
 			} catch (Exception e) {
 				System.out.println("[Error] Can't find " + appElemnt);
 				System.out.println("[Error] or Can't find " + toElemnt);
-				CommandError = false;// è‹¥æ‰¾ä¸åˆ°æŒ‡å®šå…ƒä»¶ï¼Œå‰‡è¨­å®šCommandError=false
+				CommandError = false;// ­Y§ä¤£¨ì«ü©w¤¸¥ó¡A«h³]©wCommandError=false
 			}
 		}
 	}
@@ -345,7 +345,7 @@ public class method {
 	}
 
 	/*
-	 * ä¸Šä¸‹éš¨æ©Ÿæ»‘å‹•næ¬¡ public void Swipe() { Random rand = new Random(); boolean
+	 * ¤W¤UÀH¾÷·Æ°Ên¦¸ public void Swipe() { Random rand = new Random(); boolean
 	 * items[] = { true, false }; for (int i = 0; i < driver.length; i++) { for
 	 * (int j = 0; j < iterative; j++) { if (items[rand.nextInt(items.length)])
 	 * { driver[i].swipe(startx, starty, endx, endy, 500); }else{
@@ -354,8 +354,8 @@ public class method {
 	 */
 
 	public void ByXpath_Swipe_Vertical() {
-		Point p;// å…ƒä»¶åº§æ¨™
-		Dimension s;// å…ƒä»¶å¤§å°
+		Point p;// ¤¸¥ó®y¼Ğ
+		Dimension s;// ¤¸¥ó¤j¤p
 		WebElement e;
 		for (int i = 0; i < driver.length; i++) {
 
@@ -366,9 +366,9 @@ public class method {
 				int errorX = (int) Math.round(s.width * 0.1);
 				int errorY = (int) Math.round(s.height * 0.1);
 				for (int j = 0; j < iterative; j++) {
-					if (scroll.equals("DOWN")) {// ç•«é¢å‘ä¸‹æ²å‹•
+					if (scroll.equals("DOWN")) {// µe­±¦V¤U±²°Ê
 						driver[i].swipe(p.x + errorX, p.y + s.height - errorY, p.x + errorX, p.y + errorY, 1000);
-					} else if (scroll.equals("UP")) {// ç•«é¢å‘ä¸Šæ²å‹•
+					} else if (scroll.equals("UP")) {// µe­±¦V¤W±²°Ê
 						driver[i].swipe(p.x + errorX, p.y + errorY, p.x + errorX, p.y + s.height - errorY, 1000);
 					}
 				}
@@ -376,15 +376,15 @@ public class method {
 				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception w) {
 				System.out.println("[Error] Can't find " + appElemnt);
-				CommandError = false;// è‹¥æ‰¾ä¸åˆ°æŒ‡å®šå…ƒä»¶ï¼Œå‰‡è¨­å®šCommandError=false
+				CommandError = false;// ­Y§ä¤£¨ì«ü©w¤¸¥ó¡A«h³]©wCommandError=false
 			}
 
 		}
 	}
 
 	public void ByXpath_Swipe_Horizontal() {
-		Point p;// å…ƒä»¶åº§æ¨™
-		Dimension s;// å…ƒä»¶å¤§å°
+		Point p;// ¤¸¥ó®y¼Ğ
+		Dimension s;// ¤¸¥ó¤j¤p
 		WebElement e;
 		for (int i = 0; i < driver.length; i++) {
 			try {
@@ -394,9 +394,9 @@ public class method {
 				int errorX = (int) Math.round(s.getWidth() * 0.1);
 				int errorY = (int) Math.round(s.getHeight() * 0.1);
 				for (int j = 0; j < iterative; j++) {
-					if (scroll.equals("RIGHT")) {// ç•«é¢å‘å³æ²å‹•
+					if (scroll.equals("RIGHT")) {// µe­±¦V¥k±²°Ê
 						driver[i].swipe(p.x + errorX, p.y + errorY, p.x + s.width - errorX, p.y + errorY, 1000);
-					} else if (scroll.equals("LEFT")) {// ç•«é¢å‘å·¦æ²å‹•
+					} else if (scroll.equals("LEFT")) {// µe­±¦V¥ª±²°Ê
 						driver[i].swipe(p.x + s.width - errorX, p.y + errorY, p.x + errorX, p.y + errorY, 1000);
 					}
 				}
@@ -404,7 +404,7 @@ public class method {
 				CaseErrorList[CurrentCaseNumber] = ErrorList;
 			} catch (Exception w) {
 				System.out.println("[Error] Can't find " + appElemnt);
-				CommandError = false;// è‹¥æ‰¾ä¸åˆ°æŒ‡å®šå…ƒä»¶ï¼Œå‰‡è¨­å®šCommandError=false
+				CommandError = false;// ­Y§ä¤£¨ì«ü©w¤¸¥ó¡A«h³]©wCommandError=false
 			}
 
 		}
@@ -427,43 +427,43 @@ public class method {
 			wait[i] = new WebDriverWait(driver[i], device_timeout);
 			try {
 
-				WebElement ScrollBar, targetElement;// å®šç¾©å·è»¸èˆ‡æº–å‚™æœå°‹çš„å…ƒä»¶
-				Point ScrollBarP, targetElementP;// å·è»¸èˆ‡æº–å‚™æœå°‹å…ƒä»¶çš„åº§æ¨™
-				Dimension ScrollBarS, targetElementS;// å·è»¸èˆ‡æº–å‚™æœå°‹å…ƒä»¶çš„é•·åŠå¯¬
+				WebElement ScrollBar, targetElement;// ©w¸q¨÷¶b»P·Ç³Æ·j´Mªº¤¸¥ó
+				Point ScrollBarP, targetElementP;// ¨÷¶b»P·Ç³Æ·j´M¤¸¥óªº®y¼Ğ
+				Dimension ScrollBarS, targetElementS;// ¨÷¶b»P·Ç³Æ·j´M¤¸¥óªºªø¤Î¼e
 
 				ScrollBar = driver[i].findElement(By.xpath(appElemnt));
 				targetElement = driver[i].findElement(By.xpath(appInput));
 
-				ScrollBarP = ScrollBar.getLocation();// å·è»¸çš„åº§æ¨™
-				targetElementP = targetElement.getLocation();// æº–å‚™æœå°‹å…ƒä»¶çš„åº§æ¨™
+				ScrollBarP = ScrollBar.getLocation();// ¨÷¶bªº®y¼Ğ
+				targetElementP = targetElement.getLocation();// ·Ç³Æ·j´M¤¸¥óªº®y¼Ğ
 
-				ScrollBarS = ScrollBar.getSize();// å·è»¸å…ƒä»¶çš„é•·åŠå¯¬
-				targetElementS = targetElement.getSize();// æº–å‚™æœå°‹å…ƒä»¶çš„é•·åŠå¯¬
+				ScrollBarS = ScrollBar.getSize();// ¨÷¶b¤¸¥óªºªø¤Î¼e
+				targetElementS = targetElement.getSize();// ·Ç³Æ·j´M¤¸¥óªºªø¤Î¼e
 
 				int errory = (int) Math.round(ScrollBarS.height * 0.1);
 				int errorx = (int) Math.round(ScrollBarS.width * 0.1);
 
 				while (targetElementP.y == 0 || targetElementP.x < 0
-						|| targetElementP.x + targetElementS.width > ScrollBarP.x + ScrollBarS.width) {// æ ¹æ“šæœå°‹å…ƒä»¶çš„yåº§æ¨™æˆ–xåº§æ¨™æ˜¯å¦ç‚º0ï¼Œä¾†åˆ¤æ–·å°‹å…ƒä»¶æ˜¯å¦é¡¯ç¤ºæ–¼è¡Œå‹•è£ç½®ç•«é¢ä¸Š
+						|| targetElementP.x + targetElementS.width > ScrollBarP.x + ScrollBarS.width) {// ®Ú¾Ú·j´M¤¸¥óªºy®y¼Ğ©Îx®y¼Ğ¬O§_¬°0¡A¨Ó§PÂ_´M¤¸¥ó¬O§_Åã¥Ü©ó¦æ°Ê¸Ë¸mµe­±¤W
 
 					switch (scroll.toString()) {
 
-					case "DOWN":// å‘ä¸‹æœå°‹
+					case "DOWN":// ¦V¤U·j´M
 						driver[i].swipe(ScrollBarP.x, ScrollBarS.height + ScrollBarP.y - errory, ScrollBarP.x,
 								ScrollBarP.y + errory, 2000);
 						break;
 
-					case "UP":// å‘ä¸Šæœå°‹
+					case "UP":// ¦V¤W·j´M
 						driver[i].swipe(ScrollBarP.x, ScrollBarP.y + errory, ScrollBarP.x,
 								ScrollBarP.y + ScrollBarS.height - errory, 2000);
 						break;
 
-					case "LEFT":// ç•«é¢å‘å·¦æ²å‹•(è§€çœ‹ç•«é¢å³æ–¹å…§å®¹)
+					case "LEFT":// µe­±¦V¥ª±²°Ê(Æ[¬İµe­±¥k¤è¤º®e)
 						driver[i].swipe(ScrollBarP.x + ScrollBarS.width - errorx, ScrollBarP.y, ScrollBarP.x + errorx,
 								ScrollBarP.y, 2000);
 						break;
 
-					case "RIGHT":// ç•«é¢å‘å³æ²å‹•(è§€çœ‹ç•«é¢å·¦æ–¹å…§å®¹)
+					case "RIGHT":// µe­±¦V¥k±²°Ê(Æ[¬İµe­±¥ª¤è¤º®e)
 						driver[i].swipe(ScrollBarP.x + errorx, ScrollBarP.y, ScrollBarP.x + ScrollBarS.width - errorx,
 								ScrollBarP.y, 2000);
 						break;
@@ -472,11 +472,11 @@ public class method {
 					targetElementP = targetElement.getLocation();
 				}
 
-				// ç•¶æœå°‹å…ƒä»¶å‡ºç¾æ–¼ç•«é¢ä¸Šå¾Œï¼Œå†å°‡æœå°‹å…ƒä»¶å®Œæ•´ç§»å‹•è‡³æ²è»¸çš„UIç¯„åœå…§ï¼Œç›®çš„ï¼šé¿å…æœå°‹å…ƒä»¶éƒ¨åˆ†UIè¢«æ²è»¸çš„UIæ“‹ä½ï¼Œå°è‡´ç„¡æ³•æ­£ç¢ºClick()å…ƒä»¶
+				// ·í·j´M¤¸¥ó¥X²{©óµe­±¤W«á¡A¦A±N·j´M¤¸¥ó§¹¾ã²¾°Ê¦Ü±²¶bªºUI½d³ò¤º¡A¥Øªº¡GÁ×§K·j´M¤¸¥ó³¡¤ÀUI³Q±²¶bªºUI¾×¦í¡A¾É­PµLªk¥¿½TClick()¤¸¥ó
 				switch (scroll.toString()) {
 
 				case "DOWN":
-					// åˆ¤æ–·æœå°‹å…ƒä»¶UIæ˜¯å¦è¢«æ²è»¸çš„UIæ“‹ä½
+					// §PÂ_·j´M¤¸¥óUI¬O§_³Q±²¶bªºUI¾×¦í
 					if (targetElementP.y + targetElementS.height > ScrollBarP.y + ScrollBarS.height) {
 						driver[i].swipe(targetElementP.x, targetElementP.y - errory, targetElementP.x,
 								ScrollBarP.y + errory, 2000);
@@ -484,7 +484,7 @@ public class method {
 					break;
 
 				case "UP":
-					// åˆ¤æ–·æœå°‹å…ƒä»¶UIæ˜¯å¦è¢«æ²è»¸çš„UIæ“‹ä½
+					// §PÂ_·j´M¤¸¥óUI¬O§_³Q±²¶bªºUI¾×¦í
 					if (targetElementP.y < ScrollBarP.y) {
 						driver[i].swipe(targetElementP.x, targetElementP.y + targetElementS.height + errory,
 								targetElementP.x, ScrollBarP.y + ScrollBarS.height - errory, 2000);
@@ -514,7 +514,7 @@ public class method {
 			} catch (Exception w) {
 				System.out.print("[Error] Can't find " + appElemnt);
 				System.out.println("[Error] Can't find " + appInput);
-				CommandError = false;// è‹¥æ‰¾ä¸åˆ°æŒ‡å®šå…ƒä»¶ï¼Œå‰‡è¨­å®šCommandError=false
+				CommandError = false;// ­Y§ä¤£¨ì«ü©w¤¸¥ó¡A«h³]©wCommandError=false
 			}
 		}
 
@@ -522,9 +522,9 @@ public class method {
 
 	public void QuitAPP() {
 		for (int j = 0; j < driver.length; j++) {
-			driver[j].quit();// é›¢é–‹APPå¾Œï¼Œå¯«å…¥æ¸¬è©¦çµæœPassæˆ–Error
+			driver[j].quit();// Â÷¶}APP«á¡A¼g¤J´ú¸Õµ²ªGPass©ÎError
 
-			// é–‹å•ŸExcel
+			// ¶}±ÒExcel
 			try {
 				workBook = new XSSFWorkbook(new FileInputStream("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
 			} catch (Exception e) {
@@ -532,22 +532,22 @@ public class method {
 			}
 			for (int i = 0; i < driver.length; i++) {
 
-				if (TestCase.DeviceInformation.deviceName.get(i).toString().length() > 20) {// Excelå·¥ä½œè¡¨åç¨±æœ€å¸¸31å­—å…ƒå› ï¼Œæ•…éœ€åˆ¤æ–·UDIDé•·åº¦æ˜¯å¦å¤§æ–¼31
-					char[] NewUdid = new char[20];// å› éœ€åŒ…å«_TestReportå­—ä¸²(å…±11å­—å…ƒ)ï¼Œæ•…è¨­å®š20ä½å­—å…ƒé™£åˆ—(31-11)
-					TestCase.DeviceInformation.deviceName.get(i).toString().getChars(0, 20, NewUdid, 0);// å–å‡ºUDIDå‰20å­—å…ƒçµ¦NewUdid
-					Sheet = workBook.getSheet(String.valueOf(NewUdid) + "_TestReport");// æ ¹æ“šNewUdidï¼ŒæŒ‡å®šæŸå°è£ç½®çš„TestReport
+				if (TestCase.DeviceInformation.deviceName.get(i).toString().length() > 20) {// Excel¤u§@ªí¦WºÙ³Ì±`31¦r¤¸¦]¡A¬G»İ§PÂ_UDIDªø«×¬O§_¤j©ó31
+					char[] NewUdid = new char[20];// ¦]»İ¥]§t_TestReport¦r¦ê(¦@11¦r¤¸)¡A¬G³]©w20¦ì¦r¤¸°}¦C(31-11)
+					TestCase.DeviceInformation.deviceName.get(i).toString().getChars(0, 20, NewUdid, 0);// ¨ú¥XUDID«e20¦r¤¸µ¹NewUdid
+					Sheet = workBook.getSheet(String.valueOf(NewUdid) + "_TestReport");// ®Ú¾ÚNewUdid¡A«ü©w¬Y¥x¸Ë¸mªºTestReport
 																						// sheet
 				} else {
-					Sheet = workBook.getSheet(TestCase.DeviceInformation.deviceName.get(i).toString() + "_TestReport");// æŒ‡å®šæŸå°è£ç½®çš„TestReport
+					Sheet = workBook.getSheet(TestCase.DeviceInformation.deviceName.get(i).toString() + "_TestReport");// «ü©w¬Y¥x¸Ë¸mªºTestReport
 																														// sheet
 				}
 
-				if (CaseErrorList[CurrentCaseNumber][i].equals("Pass")) {// å–å‡ºCaseErrorListä¹‹ç¬¬CurrentCaseNumberå€‹æ¸¬é …ä¸­çš„ç¬¬iå°è¡Œå‹•è£ç½®ä¹‹çµæœ
-					Sheet.getRow(CurrentCaseNumber + 1).getCell(1).setCellValue("Pass");// å¡«å…¥ç¬¬iå°è¡Œå‹•è£ç½®ä¹‹ç¬¬CurrentCaseNumberå€‹æ¸¬é …çµæœPass
+				if (CaseErrorList[CurrentCaseNumber][i].equals("Pass")) {// ¨ú¥XCaseErrorList¤§²ÄCurrentCaseNumber­Ó´ú¶µ¤¤ªº²Äi¥x¦æ°Ê¸Ë¸m¤§µ²ªG
+					Sheet.getRow(CurrentCaseNumber + 1).getCell(1).setCellValue("Pass");// ¶ñ¤J²Äi¥x¦æ°Ê¸Ë¸m¤§²ÄCurrentCaseNumber­Ó´ú¶µµ²ªGPass
 				}
 
 			}
-			// åŸ·è¡Œå¯«å…¥Excelå¾Œçš„å­˜æª”å‹•ä½œ
+			// °õ¦æ¼g¤JExcel«áªº¦sÀÉ°Ê§@
 			try {
 				FileOutputStream out = new FileOutputStream(
 						new File("C:\\TUTK_QA_TestTool\\TestReport\\TestReport.xlsm"));
@@ -562,20 +562,20 @@ public class method {
 	}
 
 	public void Sleep() {
-		String NewString = "";// æ–°å­—ä¸²
-		char[] r = { '.' };// å°æ•¸é»å­—å…ƒ
-		char[] c = appInput.toCharArray();// å°‡å­—ä¸²è½‰æˆå­—å…ƒé™£åˆ—
+		String NewString = "";// ·s¦r¦ê
+		char[] r = { '.' };// ¤p¼ÆÂI¦r¤¸
+		char[] c = appInput.toCharArray();// ±N¦r¦êÂà¦¨¦r¤¸°}¦C
 		for (int i = 0; i < c.length; i++) {
-			if (c[i] != r[0]) {// åˆ¤æ–·å­—å…ƒæ˜¯å¦ç‚ºå°æ•¸é»
-				NewString = NewString + c[i];// å¦ï¼Œå°‡å­—å…ƒçµ„åˆæˆæ–°å­—ä¸²
+			if (c[i] != r[0]) {// §PÂ_¦r¤¸¬O§_¬°¤p¼ÆÂI
+				NewString = NewString + c[i];// §_¡A±N¦r¤¸²Õ¦X¦¨·s¦r¦ê
 			} else {
-				break;// æ˜¯ï¼Œè·³å‡ºè¿´åœˆ
+				break;// ¬O¡A¸õ¥X°j°é
 			}
 		}
 
 		try {
 			System.out.println("[driver] [start] Sleep(): " + NewString + " second...");
-			Thread.sleep(Integer.valueOf(NewString) * 1000);// å°‡å­—ä¸²è½‰æˆæ•´æ•¸
+			Thread.sleep(Integer.valueOf(NewString) * 1000);// ±N¦r¦êÂà¦¨¾ã¼Æ
 			System.out.println("[driver] [end] Sleep");
 		} catch (Exception e) {
 			;
@@ -595,9 +595,9 @@ public class method {
 			try {
 				FileUtils.copyFile(screenShotFile, new File("C:\\TUTK_QA_TestTool\\TestReport\\"
 						+ TestCase.CaseList.get(CurrentCaseNumber) + "_" + month + day + hour + min + sec + ".jpg"));
-				System.out.println("[Log] " + "ScreenShoot Successfully!! (CaseName+Month+Day+Hour+Minus+Second)");
+				System.out.println("[Log] " + "ScreenShot Successfully!! (CaseName+Month+Day+Hour+Minus+Second)");
 			} catch (IOException e) {
-				;
+				System.out.println("[Error]Fail to ScreenShot");
 			}
 		}
 	}
@@ -635,8 +635,8 @@ public class method {
 				cap[i].setCapability(MobileCapabilityType.UDID, TestCase.DeviceInformation.deviceName.get(i));
 				cap[i].setCapability(IOSMobileCapabilityType.BUNDLE_ID, TestCase.DeviceInformation.BundleID);
 				cap[i].setCapability(SeeTestCapabilityType.REPORT_FORMAT, "xml");
-				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TUTK_QA_TestTool\\TestReport");// Reportè·¯å¾‘
-				cap[i].setCapability(SeeTestCapabilityType.TEST_NAME, TestCase.CaseList.get(CurrentCaseNumber));// TestCaseåç¨±
+				cap[i].setCapability(SeeTestCapabilityType.REPORT_DIRECTORY, "C:\\TUTK_QA_TestTool\\TestReport");// Report¸ô®|
+				cap[i].setCapability(SeeTestCapabilityType.TEST_NAME, TestCase.CaseList.get(CurrentCaseNumber));// TestCase¦WºÙ
 
 				try {
 					driver[j] = new SeeTestIOSDriver(new URL("http://localhost:" + port + "/wd/hub"), cap[j]);

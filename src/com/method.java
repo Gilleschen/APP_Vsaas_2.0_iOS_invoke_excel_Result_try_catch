@@ -431,8 +431,8 @@ public class method {
 				Point ScrollBarP, targetElementP;// 卷軸與準備搜尋元件的座標
 				Dimension ScrollBarS, targetElementS;// 卷軸與準備搜尋元件的長及寬
 
-				ScrollBar = driver[i].findElement(By.xpath(appElemnt));
-				targetElement = driver[i].findElement(By.xpath(appInput));
+				ScrollBar = wait[i].until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appElemnt)));
+				targetElement = wait[i].until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appInput)));
 
 				ScrollBarP = ScrollBar.getLocation();// 卷軸的座標
 				targetElementP = targetElement.getLocation();// 準備搜尋元件的座標
@@ -468,7 +468,7 @@ public class method {
 								ScrollBarP.y, 2000);
 						break;
 					}
-					targetElement = driver[i].findElement(By.xpath(appInput));
+					targetElement = wait[i].until(ExpectedConditions.visibilityOfElementLocated(By.xpath(appInput)));
 					targetElementP = targetElement.getLocation();
 				}
 
